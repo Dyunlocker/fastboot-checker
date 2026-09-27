@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fastboot USB Checker</title>
+    <style>
+        body {
+            font-family: 'Khmer OS Siemreap', Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h2 {
+            color: #1a73e8;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #1557b0;
+        }
+        #output {
+            margin-top: 20px;
+            text-align: left;
+            background: #f1f3f4;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>📱 Fastboot Web Checker</h2>
+    <p>សូមភ្ជាប់ទូរស័ព្ទចូលជា Fastboot Mode រួចចុចប៊ូតុងខាងក្រោមដើម្បីតភ្ជាប់។</p>
+    <button id="connectBtn">🔗 ភ្ជាប់ទូរស័ព្ទ (Connect USB)</button>
+    <div id="output">កំពុងរង់ចាំការតភ្ជាប់...</div>
+</div>
+
+<script>
+    const connectBtn = document.getElementById('connectBtn');
+    const output = document.getElementById('output');
+
+    connectBtn.addEventListener('click', async () => {
+        try {
+            output.style.display = 'block';
+            output.textContent = 'កំពុងស្នើសុំការតភ្ជាប់ USB...';
+
+            // ស្នើសុំសិទ្ធិភ្ជាប់ USB Device (តម្រូវឱ្យទូរស័ព្ទស្ថិតក្នុង Fastboot Mode)
+            const device = await navigator.usb.requestDevice({
+                filters: [] // បើកទូលាយឱ្យមើលឃើញគ្រប់ Device ឬអាចដាក់ Vendor ID បន្ថែម
+            });
+
+            output.textContent = `✅ បានតភ្ជាប់ជោគជ័យ!\n-------------------\nឈ្មោះឧបករណ៍: ${device.productName || 'មិនស្គាល់'}\nManufacturer ID: ${device.vendorId}\nProduct ID: ${device.productId}`;
+            
+        } catch (error) {
+            output.textContent = `❌ បរាជ័យក្នុងការតភ្ជាប់៖\n${error.message}`;
+        }
+    });
+</script>
+
+</body>
+</html>
